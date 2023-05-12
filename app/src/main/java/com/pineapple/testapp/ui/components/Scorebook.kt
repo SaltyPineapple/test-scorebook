@@ -15,13 +15,17 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pineapple.testapp.models.Game
+import com.pineapple.testapp.models.Player
 import com.pineapple.testapp.models.games
 import com.pineapple.testapp.ui.theme.TestAppShapes
 
@@ -29,30 +33,36 @@ import com.pineapple.testapp.ui.theme.TestAppShapes
 fun Scorebook(game: Game){
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 1.dp)
+        contentPadding = PaddingValues(horizontal = 1.dp, vertical = 1.dp)
     ) {
-        items(game.numberPlayers) { game -> PlayerCard(3,  {}, {}) }
+        items(game.numberPlayers) { playerId -> PlayerCard(game.players[playerId],  { }, { }) }
     }
 
 }
 
 @Composable
 fun PlayerCard(
-    score: Int,
+    player: Player,
     incrementScore: () -> Unit,
     decrementScore: () -> Unit,
 ){
-    Row(
+    Column(
         modifier = Modifier
-            .background(color = Color.White)
-            .padding(vertical = 5.dp)) {
-        ScoreButton(adjustScore = decrementScore, icon = Icons.Default.Delete)
-        Box(modifier = Modifier
-            .padding(40.dp, 10.dp)
-        ){
-            Text(text = score.toString(), textAlign = TextAlign.Center)
+            .background(color = Color.Blue),
+    ) {
+        Text(text = player.name)
+        Row(
+            modifier = Modifier
+                .background(color = Color.White)
+                .padding(vertical = 5.dp)) {
+            ScoreButton(adjustScore = decrementScore, icon = Icons.Default.Delete)
+            Box(modifier = Modifier
+                .padding(40.dp, 10.dp)
+            ){
+                Text(text = player.score.toString(), textAlign = TextAlign.Center, fontSize = 40.sp)
+            }
+            ScoreButton(adjustScore = incrementScore, icon = Icons.Default.Add)
         }
-        ScoreButton(adjustScore = incrementScore, icon = Icons.Default.Add)
     }
 }
 
@@ -76,6 +86,13 @@ fun ScoreButton(adjustScore: () -> Unit, icon: ImageVector){
 
 }
 
+private fun AdjustScore(player: Player, isAddition: Boolean): Int{
+    var score = player.score
+    if(isAddition) score++ else score--
+
+    return score
+}
+
 @Preview("Add Score Button")
 @Composable
 fun ScoreButtonAddPreview(){
@@ -91,7 +108,8 @@ fun ScoreButtonRemovePreview(){
 @Preview
 @Composable
 fun PlayerCardPreview(){
-    PlayerCard(5, {}, {})
+    val game = games[1]
+    PlayerCard(game.players[1], {}, {})
 }
 
 @Preview

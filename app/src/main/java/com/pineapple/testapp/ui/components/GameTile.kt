@@ -56,7 +56,7 @@ fun GameTile(
             )
         }
         Text(text = game.title, maxLines = 1,)
-        Text(text = game.numberPlayers.toString(), maxLines = 1,)
+        Text(text = "Players: " + game.numberPlayers.toString(), maxLines = 1,)
     }
 }
 
