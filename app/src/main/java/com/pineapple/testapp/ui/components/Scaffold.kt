@@ -7,14 +7,16 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
+import com.pineapple.testapp.models.createGame
 
 @Composable
 fun TestAppScaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    floatingActionButton: @Composable (() -> Unit) = {},
+    floatingActionButton: @Composable (() -> Unit) = { createGame("new game", 4)},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
+    bottomBar: @Composable (() -> Unit) = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -23,6 +25,7 @@ fun TestAppScaffold(
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         isFloatingActionButtonDocked = isFloatingActionButtonDocked,
+        bottomBar = bottomBar,
         content = content
     )
 }

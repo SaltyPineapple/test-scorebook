@@ -30,14 +30,13 @@ import com.pineapple.testapp.models.games
 import com.pineapple.testapp.ui.theme.TestAppShapes
 
 @Composable
-fun Scorebook(game: Game){
+fun Scorebook(game: Game = games[0]){
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(horizontal = 1.dp, vertical = 1.dp)
     ) {
-        items(game.numberPlayers) { playerId -> PlayerCard(game.players[playerId],  { }, { }) }
+        items(game.numberPlayers) { playerId -> PlayerCard(game.players[playerId],  { game.players[playerId].score++ }, { game.players[playerId].score-- }) }
     }
-
 }
 
 @Composable
@@ -84,13 +83,6 @@ fun ScoreButton(adjustScore: () -> Unit, icon: ImageVector){
         )
     }
 
-}
-
-private fun AdjustScore(player: Player, isAddition: Boolean): Int{
-    var score = player.score
-    if(isAddition) score++ else score--
-
-    return score
 }
 
 @Preview("Add Score Button")

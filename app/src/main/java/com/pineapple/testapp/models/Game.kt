@@ -6,10 +6,41 @@ import com.pineapple.testapp.R
 data class Game (val id: Int, val title: String, val numberPlayers: Int, val imageUrl: Int, val players: List<Player>)
 
 /**
+*   In reality, this function would call a data layer db call to get the games
+*/
+fun getGame(gameId: Int?): Game{
+    return games.first { it.id == gameId }
+}
+
+fun createGame(title: String, numberPlayers: Int){
+    val game = Game(id = games.size + 1, title = title, numberPlayers = numberPlayers, imageUrl = addGameImage(), players = createPlayers(numberPlayers))
+    games.add(game)
+}
+
+/**
+ * FUTURE TODO: make this grab a random image from the cool sports images
+ */
+fun addGameImage() : Int{
+    return R.drawable.img_tabletennis
+}
+
+
+fun createPlayers(numberPlayers: Int) : List<Player>{
+    var playerList = mutableListOf<Player>()
+    var x = 0;
+    while(x < numberPlayers){
+        playerList.add(Player("Steve", 0))
+        x++
+    }
+    return playerList
+}
+
+/**
  * Static Data
+ * In reality, this list would be grabbed from the db
  */
 
-val games = listOf(
+val games = mutableListOf(
     Game(
         id = 1,
         title = "Game 1",
